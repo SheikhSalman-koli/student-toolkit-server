@@ -5,11 +5,8 @@ const app = express()
 const port = process.env.PORT || 3000
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-
 app.use(cors())
 app.use(express.json())
-
-////////   must change these tow things 1:${process.env.DB_NAME} 2:${process.env.DB_PASS}
 
 const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASS}@cluster0.dclhmji.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -26,13 +23,18 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
 
-    const db = client.db('medical-camp')
-    const yourCollection = db.collection('your-collection-name')
+    const DB = client.db('student-toolkit')
 
-    app.get('/test/mongo', (req, res)=> {
-        res.send('all good, all set, now go ahed')
+    const classCollection = DB.collection('classes')
+
+    app.post('/saveClass', async(req, res)=>{
+      const newClass = req.body
+      const result = await classCollection.insertOne(newClass)
+      res.send(result)
     })
-    
+
+
+
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     // console.log("Pinged your deployment. You successfully connected to MongoDB!");
