@@ -33,6 +33,12 @@ async function run() {
       res.send(result)
     })
 
+    app.get('/my-schedules/:email', async(req,res)=>{
+       const email = req?.params.email
+       const result = await classCollection.find({email}).toArray()
+       res.send(result)
+    })
+
 
 
     // Send a ping to confirm a successful connection
