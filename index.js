@@ -3,7 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const port = process.env.PORT || 3000
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 app.use(cors())
 app.use(express.json())
@@ -35,8 +35,16 @@ async function run() {
 
     app.get('/my-schedules/:email', async(req,res)=>{
        const email = req?.params.email
-       const result = await classCollection.find({email}).toArray()
+      //  console.log(email, req.params);
+       const result = await classCollection.find({email}).sort({startTime: 1}).toArray()
        res.send(result)
+    })
+
+    app.delete('/deleteschedule/:id', async(req,res)=> {
+      const id = req?.params.id
+      const filter = {_id : new ObjectId(id)}
+      const result =await classCollection.deleteOne(filter)
+      res.send(result)
     })
 
 
@@ -53,9 +61,9 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res)=> {
-    res.send('hello from medical camp')
+    res.send('hello from student toolkit')
 })
 
 app.listen(port,()=>{
-    console.log(`medical camp is running on port ${port}`);
+    console.log(`Toolkit is running on port ${port}`);
 })
