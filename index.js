@@ -47,6 +47,18 @@ async function run() {
       res.send(result)
     })
 
+    app.patch('/update-schedule/:id', async(req,res)=>{
+      const id = req?.params.id
+      const filter = {_id: new ObjectId((id))}
+      const updatedData = req?.body
+      const options = { upsert : true}
+      const updatedDoc = {
+        $set: updatedData
+      }
+      const updatedResult = await classCollection.updateOne(filter, updatedDoc, options)
+      res.send(updatedResult)
+    })
+
 
 
     // Send a ping to confirm a successful connection
