@@ -75,11 +75,20 @@ async function run() {
     // open AI
     app.post("/chat", async (req, res) => {
       try {
-        const { message } = req.body;
+        const { message } = req?.body;
 
-        const response = await openAi.chat.completions.create({
+        const response = await openAi?.chat.completions.create({
           model: "gpt-4o-mini", // or "gpt-4o", "gpt-4.1"
-          messages: [{ role: "user", content: message }],
+          messages: [
+            {
+              role: "system",
+              content: "You are a helpful tutor who explains concepts in a well-structured, organized way using bullet points, headings, and short breakdowns."
+            },
+            {
+              role: "user",
+              content: message
+            }
+          ],
         });
 
         res.json({ reply: response.choices[0].message.content });
